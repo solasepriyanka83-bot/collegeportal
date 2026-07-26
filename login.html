@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>College Portal Login</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+    url('https://images.unsplash.com/photo-1523580846011-d3a5bc25702b') no-repeat center center/cover;
+    background-size:cover;
+}
+
+.box{
+    width:350px;
+    margin:120px auto;
+    padding:25px;
+    background:rgba(255,255,255,0.15);
+    backdrop-filter:blur(10px);
+    border-radius:12px;
+    text-align:center;
+    color:white;
+    box-shadow:0 8px 20px rgba(0,0,0,0.4);
+}
+
+h2{
+    margin-bottom:20px;
+}
+
+input{
+    width:90%;
+    padding:12px;
+    margin:8px 0;
+    border:none;
+    border-radius:6px;
+}
+
+button{
+    width:90%;
+    padding:12px;
+    background:#4facfe;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    margin-top:10px;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#667eea;
+}
+
+.error{
+    color:yellow;
+    margin-top:10px;
+}
+a{
+    color:white;
+    text-decoration:underline;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>🎓 College Portal Login</h2>
+
+<form id="loginForm">
+<input type="email" id="email" placeholder="Enter Email" required>
+<input type="password" id="password" placeholder="Enter Password" required>
+<button type="submit">Login</button>
+</form>
+
+<p id="error" class="error"></p>
+
+<p>New Student? <a href="registration.html">Register Here</a></p>
+
+</div>
+
+<script>
+// 🔐 BLOCK DIRECT LOGIN PAGE IF NO STUDENT REGISTERED
+if(!localStorage.getItem("student")){
+    alert("⚠️ Please register first!");
+    window.location.href="registration.html";
+}
+
+document.getElementById("loginForm").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    let email = document.getElementById("email").value.trim();
+    let pass = document.getElementById("password").value.trim();
+
+    let student = JSON.parse(localStorage.getItem("student"));
+
+    if(student && email === student.email && pass === student.password){
+        alert("✅ Login Successful!");
+
+        // 🔑 Save session data
+        sessionStorage.setItem("loginData", JSON.stringify({
+            email: student.email,
+            name: student.name,
+            password: student.password
+        }));
+
+        // 🔹 Redirect to Dashboard
+        window.location.href="dashboard.html";
+    } else {
+        document.getElementById("error").innerText = "❌ Invalid Email or Password!";
+    }
+});
+</script>
+
+</body>
+</html>

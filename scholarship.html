@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Scholarship Portal</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:
+    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+    url('https://images.unsplash.com/photo-1523580846011-d3a5bc25702b');
+    background-size:cover;
+    background-position:center;
+    color:white;
+}
+
+/* Box */
+.box{
+    width:400px;
+    margin:60px auto;
+    padding:20px;
+    background:rgba(255,255,255,0.15);
+    backdrop-filter:blur(10px);
+    border-radius:12px;
+    text-align:center;
+}
+
+/* Inputs */
+input,select{
+    width:90%;
+    padding:10px;
+    margin:8px;
+    border:none;
+    border-radius:6px;
+}
+
+/* Buttons */
+button{
+    width:95%;
+    padding:10px;
+    background:#28a745;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+/* Result Box */
+#result{
+    display:block;
+    margin-top:20px;
+    padding:15px;
+    background:white;
+    color:black;
+    border-radius:10px;
+    text-align:left;
+}
+
+/* Back Button */
+.back{
+    background:#dc3545;
+    margin-top:10px;
+    color:white;
+    padding:10px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- Scholarship Login -->
+<div class="box" id="loginBox">
+<h2>🎓 Scholarship Login Verification</h2>
+<form id="scholarshipLoginForm">
+<input type="email" id="schEmail" placeholder="Enter Gmail" required>
+<input type="password" id="schPassword" placeholder="Enter Password" required>
+<button type="submit">Verify Login</button>
+<p id="loginError" style="color:yellow;"></p>
+</form>
+</div>
+
+<!-- Scholarship Form -->
+<div class="box" id="formBox" style="display:none;">
+<h2>🎓 Scholarship Form</h2>
+<form id="form">
+<input type="text" id="name" placeholder="Name" required>
+<input type="number" id="roll" placeholder="Roll Number" required>
+
+<select id="caste" required>
+<option value="">Select Caste</option>
+<option value="general">General</option>
+<option value="obc">OBC</option>
+<option value="sc">SC</option>
+<option value="st">ST</option>
+<option value="ews">EWS</option>
+</select>
+
+<input type="number" id="income" placeholder="Income (Annual in ₹)" required>
+
+<button type="submit">Submit</button>
+</form>
+</div>
+
+<!-- Result -->
+<div class="box" id="resultBox" style="display:none;">
+<h2>🎓 Scholarship Result</h2>
+<div id="result"></div>
+<button class="back" onclick="goBackForm()">⬅ Back to Dashboard</button>
+</div>
+
+<script>
+// SECURITY: check if student logged in at portal
+let loginData = JSON.parse(sessionStorage.getItem("loginData"));
+if(!loginData){
+    alert("⚠️ Please login first at portal!");
+    window.location.href="login.html";
+}
+
+// Scholarship login verification
+document.getElementById("scholarshipLoginForm").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    let email = document.getElementById("schEmail").value;
+    let password = document.getElementById("schPassword").value;
+
+    // check against portal login data
+    if(email !== loginData.email || password !== loginData.password){
+        document.getElementById("loginError").innerText = "❌ Email or Password does not match!";
+        return;
+    }
+
+    // If match, hide login, show scholarship form
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("formBox").style.display = "block";
+
+    // Prefill name
+    document.getElementById("name").value = loginData.name;
+});
+
+// Scholarship form submit
+document.getElementById("form").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    let name = document.getElementById("name").value;
+    let caste = document.getElementById("caste").value;
+    let income = document.getElementById("income").value;
+
+    // Scholarship logic
+    let eligibility="", amount="", status="";
+
+    if(caste==="sc" || caste==="st"){
+        eligibility="Eligible";
+        amount="₹50,000";
+        status="Approved";
+    }
+    else if(caste==="obc" && income < 800000){
+        eligibility="Eligible";
+        amount="₹30,000";
+        status="Approved";
+    }
+    else if(caste==="ews" && income < 500000){
+        eligibility="Eligible";
+        amount="₹20,000";
+        status="Approved";
+    }
+    else{
+        eligibility="Not Eligible";
+        amount="₹0";
+        status="Rejected";
+    }
+
+    // Hide form & show result
+    document.getElementById("formBox").style.display = "none";
+    document.getElementById("resultBox").style.display = "block";
+
+    // Show result
+    document.getElementById("result").innerHTML = `
+    <b>👤 Name:</b> ${name}<br>
+    <b>🏷 Caste:</b> ${caste.toUpperCase()}<br>
+    <b>📊 Status:</b> ${status}<br>
+    <b>🎯 Eligibility:</b> ${eligibility}<br>
+    <b>💰 Amount:</b> ${amount}
+    `;
+});
+
+// Back button function → redirect to dashboard
+function goBackForm(){
+    window.location.href = "dashboard.html";
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Dashboard</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:linear-gradient(to right,#667eea,#764ba2);
+    color:white;
+}
+
+/* Header */
+.header{
+    background:#4facfe;
+    padding:15px;
+    text-align:center;
+    font-size:22px;
+    font-weight:bold;
+}
+
+/* Container */
+.container{
+    text-align:center;
+    margin-top:40px;
+}
+
+/* Cards */
+.card{
+    display:inline-block;
+    width:200px;
+    margin:15px;
+    padding:20px;
+
+    background:white;
+    color:black;
+
+    border-radius:10px;
+    box-shadow:0px 5px 15px rgba(0,0,0,0.3);
+
+    cursor:pointer;
+    transition:0.3s;
+    font-size:18px;
+}
+
+.card:hover{
+    transform:scale(1.05);
+}
+
+/* Logout Button */
+.logout{
+    margin-top:20px;
+    padding:10px 20px;
+
+    background:red;
+    color:white;
+
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:16px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+🎓 College Portal Dashboard
+</div>
+
+<div class="container">
+
+<h2 id="welcome"></h2>
+
+<div class="card" onclick="openPage('fees.html')">
+💰 Fees Details
+</div>
+
+<div class="card" onclick="openPage('document.html')">
+📄 Documents
+</div>
+
+<div class="card" onclick="openPage('scholarship.html')">
+🎓 Scholarship
+</div>
+
+<div class="card" onclick="openPage('chatbot.html')">
+🤖 Chatbot
+</div>
+
+<br>
+
+<button class="logout" onclick="logout()">Logout</button>
+
+</div>
+
+<script>
+// 🔐 Security check: must be logged in
+var loginData = JSON.parse(sessionStorage.getItem("loginData"));
+if(!loginData){
+    alert("⚠️ Please login first!");
+    window.location.href="login.html";
+}
+
+// Display welcome message
+document.getElementById("welcome").innerText =
+"Welcome, " + loginData.name;
+
+// Open any page
+function openPage(page){
+    // Extra session check
+    var sessionCheck = JSON.parse(sessionStorage.getItem("loginData"));
+    if(!sessionCheck){
+        alert("⚠️ Please login first!");
+        window.location.href="login.html";
+    } else {
+        window.location.href = page;
+    }
+}
+
+// Logout
+function logout(){
+    sessionStorage.clear();
+    window.location.href="login.html";
+}
+
+</script>
+
+</body>
+</html>

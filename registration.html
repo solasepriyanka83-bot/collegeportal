@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Registration</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+    url('https://images.unsplash.com/photo-1523580846011-d3a5bc25702b');
+    background-size:cover;
+}
+
+.box{
+    width:350px;
+    margin:120px auto;
+    padding:25px;
+    background:rgba(255,255,255,0.15);
+    backdrop-filter:blur(10px);
+    border-radius:12px;
+    text-align:center;
+    color:white;
+}
+
+input{
+    width:90%;
+    padding:12px;
+    margin:8px;
+    border:none;
+    border-radius:6px;
+}
+
+button{
+    width:90%;
+    padding:12px;
+    background:#28a745;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.error{
+    color:yellow;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>📝 Registration</h2>
+
+<form id="registerForm">
+<input type="text" id="name" placeholder="Full Name" required>
+<input type="email" id="email" placeholder="Email" required>
+<input type="password" id="password" placeholder="Password" required>
+<input type="password" id="confirm" placeholder="Confirm Password" required>
+
+<button type="submit">Register</button>
+</form>
+
+<p id="error" class="error"></p>
+
+<p>Already have account? <a href="login.html" style="color:white;">Login</a></p>
+
+</div>
+
+<script>
+document.getElementById("registerForm").addEventListener("submit", function(e){
+e.preventDefault();
+
+var name=document.getElementById("name").value;
+var email=document.getElementById("email").value;
+var pass=document.getElementById("password").value;
+var confirm=document.getElementById("confirm").value;
+
+if(pass !== confirm){
+document.getElementById("error").innerText="❌ Passwords do not match!";
+return;
+}
+
+var student={
+name:name,
+email:email,
+password:pass
+};
+
+localStorage.setItem("student", JSON.stringify(student));
+
+alert("✅ Registration Successful!");
+window.location.href="login.html";
+});
+</script>
+
+</body>
+</html>

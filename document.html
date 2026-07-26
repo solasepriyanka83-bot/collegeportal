@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Documents</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:linear-gradient(to right,#667eea,#764ba2);
+    color:white;
+    text-align:center;
+}
+
+.container{
+    margin-top:40px;
+}
+
+/* Buttons */
+button{
+    margin:8px;
+    padding:10px 15px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    background:#4facfe;
+    color:white;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#3b8edc;
+}
+
+/* Result Box */
+.result{
+    margin-top:20px;
+    padding:20px;
+    background:white;
+    color:black;
+    width:320px;
+    margin-left:auto;
+    margin-right:auto;
+    border-radius:10px;
+    box-shadow:0px 5px 15px rgba(0,0,0,0.3);
+}
+</style>
+
+</head>
+
+<body>
+
+<h2>📄 Required Documents (Caste Wise)</h2>
+
+<div class="container">
+
+<!-- Caste Buttons -->
+<button onclick="showDocs('general')">General</button>
+<button onclick="showDocs('obc')">OBC</button>
+<button onclick="showDocs('sc')">SC</button>
+<button onclick="showDocs('st')">ST</button>
+<button onclick="showDocs('nt')">NT</button>
+<button onclick="showDocs('vjnt')">VJNT</button>
+<button onclick="showDocs('ews')">EWS</button>
+<button onclick="showDocs('other')">Other</button>
+
+<div id="output" class="result">
+👉 Click caste to see documents
+</div>
+
+<br><br>
+<button onclick="goBack()">⬅ Back</button>
+
+</div>
+
+<script>
+
+// 🔐 Correct session check
+var loginData = JSON.parse(sessionStorage.getItem("loginData"));
+if(!loginData){
+    alert("⚠️ Please login first!");
+    window.location.href="login.html";
+}
+
+function showDocs(caste){
+    let docs = "";
+
+    if(caste === "general"){
+        docs = "✔ Aadhar Card<br>✔ Marksheet<br>✔ Photo";
+    }
+    else if(caste === "obc"){
+        docs = "✔ Aadhar Card<br>✔ Marksheet<br>✔ OBC Certificate<br>✔ Income Certificate";
+    }
+    else if(caste === "sc"){
+        docs = "✔ Aadhar Card<br>✔ Marksheet<br>✔ Caste Certificate (SC)<br>✔ Income Certificate";
+    }
+    else if(caste === "st"){
+        docs = "✔ Aadhar Card<br>✔ Marksheet<br>✔ Caste Certificate (ST)<br>✔ Income Certificate";
+    }
+    else if(caste === "nt"){
+        docs = "✔ Aadhar Card<br>✔ Marksheet<br>✔ NT Certificate<br>✔ Income Certificate";
+    }
+    else if(caste === "vjnt"){
+        docs = "✔ Aadhar Card<br>✔ Marksheet<br>✔ VJNT Certificate<br>✔ Income Certificate";
+    }
+    else if(caste === "ews"){
+        docs = "✔ Aadhar Card<br>✔ Marksheet<br>✔ EWS Certificate<br>✔ Income Certificate";
+    }
+    else if(caste === "other"){
+        docs = "✔ Aadhar Card<br>✔ Marksheet<br>✔ Additional Documents as required by office";
+    }
+
+    document.getElementById("output").innerHTML = docs;
+}
+
+function goBack(){
+    window.location.href="dashboard.html";
+}
+</script>
+
+</body>
+</html>

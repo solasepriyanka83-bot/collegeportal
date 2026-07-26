@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>College Portal Chatbot</title>
+<style>
+/* ----------------- BODY ----------------- */
+body{
+    font-family: Arial;
+    margin:0;
+    background:linear-gradient(to right,#667eea,#764ba2);
+}
+
+/* ----------------- CHAT ICON ----------------- */
+#chatIcon{
+    position:fixed;
+    bottom:30px;
+    right:30px;
+    background:#4facfe;
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    cursor:pointer;
+    box-shadow:0 4px 8px rgba(0,0,0,0.3);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-size:28px;
+}
+
+/* ----------------- CHAT BOX ----------------- */
+#chatBox{
+    position:fixed;
+    bottom:100px;
+    right:30px;
+    width:350px;
+    max-height:550px;
+    background:white;
+    border-radius:12px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.3);
+    display:none;
+    flex-direction:column;
+    overflow:hidden;
+}
+
+/* ----------------- HEADER ----------------- */
+#chatHeader{
+    background:#4facfe;
+    color:white;
+    padding:12px;
+    font-weight:bold;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+/* ----------------- MESSAGES ----------------- */
+#messages{
+    padding:10px;
+    height:350px;
+    overflow-y:auto;
+    flex:1;
+    background: #f0f0f0;
+    display:flex;
+    flex-direction:column;
+}
+
+/* Chat bubble */
+.message{
+    margin:8px 0;
+    padding:10px;
+    border-radius:10px;
+    max-width:80%;
+    word-wrap:break-word;
+}
+
+.userMsg{
+    background:#4facfe;
+    color:white;
+    align-self:flex-end;
+}
+
+.botMsg{
+    background:#e0e0e0;
+    color:black;
+    align-self:flex-start;
+}
+
+/* ----------------- INPUT ----------------- */
+#inputBox{
+    display:flex;
+    border-top:1px solid #ccc;
+}
+
+#userInput{
+    flex:1;
+    padding:10px;
+    border:none;
+    border-radius:0;
+    outline:none;
+}
+
+#sendBtn{
+    background:#28a745;
+    color:white;
+    border:none;
+    padding:0 15px;
+    cursor:pointer;
+}
+
+/* ----------------- BUTTONS ----------------- */
+.quickBtn{
+    background:#667eea;
+    color:white;
+    border:none;
+    border-radius:6px;
+    padding:6px 10px;
+    margin:4px 4px 4px 0;
+    cursor:pointer;
+    font-size:14px;
+}
+
+/* Back Button */
+#backDashboard{
+    background:red;
+    color:white;
+    border:none;
+    padding:10px;
+    border-radius:6px;
+    margin:8px;
+    cursor:pointer;
+    width:95%;
+}
+</style>
+</head>
+<body>
+
+<!-- Chat Icon -->
+<div id="chatIcon">💬</div>
+
+<!-- Chat Box -->
+<div id="chatBox">
+    <div id="chatHeader">
+        College Assistant
+        <span id="closeChat" style="cursor:pointer;">✖</span>
+    </div>
+    <div id="messages"></div>
+    <div id="inputBox">
+        <input type="text" id="userInput" placeholder="Type your message...">
+        <button id="sendBtn">Send</button>
+    </div>
+    <button id="backDashboard">⬅ Back to Dashboard</button>
+</div>
+
+<script>
+// -------- SHOW/HIDE CHAT --------
+const chatIcon=document.getElementById("chatIcon");
+const chatBox=document.getElementById("chatBox");
+const closeChat=document.getElementById("closeChat");
+
+chatIcon.onclick=()=>{ chatBox.style.display="flex"; }
+closeChat.onclick=()=>{ chatBox.style.display="none"; }
+
+// -------- STUDENT DATA (from portal login) --------
+let student = JSON.parse(sessionStorage.getItem("loginData")); 
+
+if(!student){
+    alert("⚠️ Please login first at portal!");
+    window.location.href="login.html";
+}
+
+// -------- MESSAGE AREA --------
+const messages=document.getElementById("messages");
+const userInput=document.getElementById("userInput");
+const sendBtn=document.getElementById("sendBtn");
+
+// -------- BOT RESPONSES --------
+const botReplies = {
+    "hi":"Hi "+student.name+"! 👋 How can I help you today?",
+    "hello":"Hello "+student.name+"! 😃 What do you want to check?",
+    "fees":"Your pending fees: "+student.feesDue,
+    "scholarship":"Your scholarship status: "+student.scholarship,
+    "documents":"You can download documents category-wise: Admission, Fees, Scholarship, Exams.",
+    "help":"You can ask about Fees, Scholarship, Documents, or type a message."
+}
+
+// -------- QUICK BUTTONS --------
+function showQuickButtons(){
+    const buttons=["Fees","Scholarship","Documents","Help"];
+    let btnHtml="";
+    buttons.forEach(b=>{
+        btnHtml+=`<button class="quickBtn">${b}</button>`;
+    });
+    addBotMessage("Quick Actions: ", btnHtml);
+
+    document.querySelectorAll(".quickBtn").forEach(btn=>{
+        btn.onclick=()=>{ handleUserInput(btn.innerText.toLowerCase()); }
+    });
+}
+
+// -------- ADD MESSAGE --------
+function addBotMessage(text,btns=""){
+    let div=document.createElement("div");
+    div.className="message botMsg";
+    div.innerHTML=text+btns;
+    messages.appendChild(div);
+    messages.scrollTop=messages.scrollHeight;
+}
+
+function addUserMessage(text){
+    let div=document.createElement("div");
+    div.className="message userMsg";
+    div.innerText=text;
+    messages.appendChild(div);
+    messages.scrollTop=messages.scrollHeight;
+}
+
+// -------- HANDLE USER INPUT --------
+function handleUserInput(input){
+    addUserMessage(input);
+    input=input.toLowerCase();
+    if(botReplies[input]){
+        addBotMessage(botReplies[input]);
+    }else{
+        addBotMessage("Sorry, I did not understand 😅. Type 'Help' to see options.");
+    }
+    showQuickButtons();
+}
+
+// -------- SEND BUTTON --------
+sendBtn.onclick=()=>{
+    const val=userInput.value.trim();
+    if(val!==""){
+        handleUserInput(val);
+        userInput.value="";
+    }
+}
+
+// -------- ENTER KEY --------
+userInput.addEventListener("keydown", function(e){
+    if(e.key==="Enter"){
+        sendBtn.click();
+    }
+})
+
+// -------- INIT --------
+addBotMessage("Hello! I'm your College Assistant 🤖");
+showQuickButtons();
+
+// -------- BACK TO DASHBOARD --------
+document.getElementById("backDashboard").onclick = ()=>{
+    window.location.href="dashboard.html";
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,81 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+
+    /* Background Image + Color Overlay */
+    background: 
+        linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+        url('https://images.unsplash.com/photo-1523580846011-d3a5bc25702b');
+
+    background-size: cover;
+    background-position: center;
+
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Glass Effect Container */
+.container {
+    width: 350px;
+    padding: 30px;
+
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+
+    border-radius: 15px;
+    text-align: center;
+
+    color: white;
+    box-shadow: 0px 8px 25px rgba(0,0,0,0.3);
+}
+
+/* Heading */
+h2 {
+    margin-bottom: 20px;
+}
+
+/* Inputs */
+input {
+    width: 90%;
+    padding: 12px;
+    margin: 10px 0;
+
+    border-radius: 8px;
+    border: none;
+    outline: none;
+}
+
+/* Button */
+button {
+    width: 100%;
+    padding: 12px;
+
+    background: linear-gradient(to right, #4facfe, #00f2fe);
+    color: white;
+
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+/* Error */
+.error {
+    color: yellow;
+}
+
+/* Link */
+a {
+    color: #fff;
+    font-weight: bold;
+    text-decoration: none;
+}

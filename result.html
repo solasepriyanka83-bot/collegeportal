@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Scholarship Result</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+
+    background:
+    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+    url('https://images.unsplash.com/photo-1571260899304-425eee4c7efc');
+
+    background-size:cover;
+    background-position:center;
+    color:white;
+}
+
+/* Glass Box */
+.box{
+    width:400px;
+    margin:60px auto;
+    padding:20px;
+
+    background:rgba(255,255,255,0.15);
+    backdrop-filter:blur(10px);
+
+    border-radius:12px;
+    text-align:center;
+}
+
+/* Button */
+button{
+    padding:10px;
+    margin-top:10px;
+    background:#4facfe;
+    color:white;
+    border:none;
+    border-radius:6px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>🎓 Scholarship Result</h2>
+
+<div id="output"></div>
+
+<button onclick="goBack()">⬅ Back</button>
+
+</div>
+
+<script>
+
+// Security
+if(!sessionStorage.getItem("login")){
+    alert("Please login first!");
+    window.location.href="login.html";
+}
+
+// Get data
+let name = localStorage.getItem("name");
+let caste = localStorage.getItem("caste");
+let income = localStorage.getItem("income");
+
+// Logic
+let eligibility="", amount="", status="";
+
+if(caste==="sc" || caste==="st"){
+    eligibility="Eligible";
+    amount="₹50,000";
+    status="Approved";
+}
+else if(caste==="obc" && income < 800000){
+    eligibility="Eligible";
+    amount="₹30,000";
+    status="Approved";
+}
+else if(caste==="ews" && income < 500000){
+    eligibility="Eligible";
+    amount="₹20,000";
+    status="Approved";
+}
+else{
+    eligibility="Not Eligible";
+    amount="₹0";
+    status="Rejected";
+}
+
+// Show result
+document.getElementById("output").innerHTML = `
+<b>👤 Name:</b> ${name}<br>
+<b>🏷 Caste:</b> ${caste}<br>
+<b>📊 Status:</b> ${status}<br>
+<b>🎯 Eligibility:</b> ${eligibility}<br>
+<b>💰 Amount:</b> ${amount}
+`;
+
+function goBack(){
+window.location.href="dashboard.html";
+}
+
+</script>
+
+</body>
+</html>
